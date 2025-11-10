@@ -76,7 +76,12 @@ check_and_kill_contactsd() {
 if [ "$run_once" = true ]; then
     check_and_kill_contactsd
 else
-    echo "Starting contactsd monitor. Checking every ${INTERVAL} seconds while on battery."
+    echo -n "Starting contactsd monitor. Checking every ${INTERVAL} seconds"
+    if [ "$run_always" = false ]; then
+        echo " while on battery."
+    else
+        echo " regardless of battery status."
+    fi
     while true; do
         check_and_kill_contactsd
         # Wait for the specified interval before the next check.
