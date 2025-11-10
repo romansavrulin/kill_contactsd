@@ -44,16 +44,26 @@ source ~/.zshrc
 You should now be able to run the script directly by typing `kill_contactsd.sh` in your terminal.
 
 ## Usage
-
 *   **Continuous Monitoring (only checks when on battery):**
     ```bash
     kill_contactsd.sh
     ```
-*   **Single Run (only checks when on battery):**
+*   **`-o, --run_once`
+	* Single Run of the script
     ```bash
     kill_contactsd.sh --run-once
     ```
-
+*   **`-i <seconds>, --interval <seconds>`
+	* Set interval for checks
+    ```bash
+    kill_contactsd.sh --interval 10
+    ```
+- **`-a, -run_always`**
+	- By default script only checks usage when on battery. Use this option if you experience high CPU usage, and unwanted system freezes on AC line too.
+	```bash
+	kill_contactsd.sh -a
+	```
+- Options could be combined with each other
 ## Scheduling with Cron (Run Once per Minute)
 
 To run the script automatically every minute using cron, you can add the following line to your crontab.

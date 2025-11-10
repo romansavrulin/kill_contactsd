@@ -7,6 +7,7 @@ INTERVAL=60
 
 # Flag to indicate if the script should run only once
 run_once=false
+run_always=false
 
 # Parse command-line arguments
 if [ "$1" == "--run-once" ]; then
@@ -14,18 +15,40 @@ if [ "$1" == "--run-once" ]; then
     echo "Running once."
 fi
 
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    -o|--run_once)
+      run_once=true
+      shift # past arg
+      ;;
+    -a|--run_always)
+      run_always=true
+      shift # past arg
+      ;;
+    -i|--interval)
+      INTERVAL="$2"
+      shift # past arg
+      shift # past val
+      ;;
+    -*|--*|*)
+      echo "Unknown option $1"
+      exit 1
+      ;;
+  esac
+done
+
 # Function to perform the check and kill logic
 check_and_kill_contactsd() {
     # Get the power status from pmset
     BATTERY_STATUS=$(pmset -g batt | head -n 1 | awk -F"'" '{print $2}')
 
-    if [ "$BATTERY_STATUS" = "Battery Power" ]; then
+    if [[ "$BATTERY_STATUS" = "Battery Power" || "$run_always" = "true" ]]; then
         # Identify contactsd process(es)
         PIDS=$(pgrep -f [c]ontactsd)
         if [ -n "$PIDS" ]; then
             for PID in $PIDS; do
                 # Retrieve the CPU usage for this PID; the '=' after %cpu suppresses the header on macOS.
-                CPU_USAGE=$(ps -p "$PID" -o %cpu= | tr -d ' ')
+                CPU_USAGE=$(ps -p "$PID" -o %cpu= | tr -d ' '| sed 's/,/./')
 
                 # Validate that CPU_USAGE is a non-empty numeric value.
                 if ! [[ $CPU_USAGE =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
