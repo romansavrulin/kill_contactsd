@@ -9,12 +9,6 @@ INTERVAL=60
 run_once=false
 run_always=false
 
-# Parse command-line arguments
-if [ "$1" == "--run-once" ]; then
-    run_once=true
-    echo "Running once."
-fi
-
 while [[ $# -gt 0 ]]; do
   case $1 in
     -o|--run_once)
@@ -81,6 +75,7 @@ check_and_kill_contactsd() {
 
 
 if [ "$run_once" = true ]; then
+    echo "Running once."
     check_and_kill_contactsd
 else
     echo -n "Starting contactsd monitor. Checking every ${INTERVAL} seconds with CPU_THRESHOLD = ${CPU_THRESHOLD}"
