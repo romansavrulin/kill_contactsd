@@ -48,21 +48,26 @@ You should now be able to run the script directly by typing `kill_contactsd.sh` 
     ```bash
     kill_contactsd.sh
     ```
-*   **`-o, --run_once`
+*   **`-o, --run_once`**
 	* Single Run of the script
     ```bash
     kill_contactsd.sh --run-once
     ```
-*   **`-i <seconds>, --interval <seconds>`
+*   **`-i <seconds>, --interval <seconds>`**
 	* Set interval for checks
     ```bash
     kill_contactsd.sh --interval 10
     ```
-- **`-a, -run_always`**
+* **`-a, -run_always`**
 	- By default script only checks usage when on battery. Use this option if you experience high CPU usage, and unwanted system freezes on AC line too.
 	```bash
 	kill_contactsd.sh -a
 	```
+* **`-t, --cpu_threshold`**
+    - By default script uses threshold = 50%. Use this option if you want to finetune this value.
+    ```bash
+    kill_contactsd.sh -t 60.5
+    ```
 - Options could be combined with each other
 ## Scheduling with Cron (Run Once per Minute)
 

@@ -30,12 +30,19 @@ while [[ $# -gt 0 ]]; do
       shift # past arg
       shift # past val
       ;;
+    -t|--cpu_threshold)
+      CPU_THRESHOLD="$2"
+      shift # past arg
+      shift # past val
+      ;;
     -*|--*|*)
       echo "Unknown option $1"
       exit 1
       ;;
   esac
 done
+
+CPU_THRESHOLD=`echo "$CPU_THRESHOLD" | sed 's/,/./'`
 
 # Function to perform the check and kill logic
 check_and_kill_contactsd() {
@@ -76,7 +83,7 @@ check_and_kill_contactsd() {
 if [ "$run_once" = true ]; then
     check_and_kill_contactsd
 else
-    echo -n "Starting contactsd monitor. Checking every ${INTERVAL} seconds"
+    echo -n "Starting contactsd monitor. Checking every ${INTERVAL} seconds with CPU_THRESHOLD = ${CPU_THRESHOLD}"
     if [ "$run_always" = false ]; then
         echo " while on battery."
     else
